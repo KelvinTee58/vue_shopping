@@ -1,0 +1,37 @@
+{
+  "Goods":
+  {
+    "productId": "string",
+    "productName": "string",
+    "salePrice": "string",
+    "checked": "string",
+    "productNum": "Number",
+    "productImage": "string"
+  },
+  "User":
+  {
+    "userId": "string",
+    "userName": "string",
+    "userPwd": "string",
+    "orderList": "Array",
+    "cartList": [
+      {
+        "productId": "string",
+        "productName": "string",
+        "salePrice": "string",
+        "checked": "string",
+        "productNum": "Number",
+        "productImage": "string"
+      }],
+
+      "addressList":
+      {
+        "addressId": "string",
+        "realName":"string",
+        "streetName": "String",
+        "postCode": "Number",
+        "isDefault": "Boolean"
+      }
+  }
+
+}
