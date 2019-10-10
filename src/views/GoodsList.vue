@@ -19,20 +19,25 @@
               <a class="dropdown-item" :class="{'active':!isChoose}" @click="toggleActive" href="#">按价格由低到高</a>
             </div>
           </li>
+
         </ul>
+
       </nav>
-        
+
       <div class="row justify-content-left" >
-        <div class="col-md-2" style="min-width: 18rem;max-width: 20rem;" v-for="item in goodList">
+        <div class="col-md-3 goodsCard" style="min-width: 18rem;max-width: 20rem;" v-for="item in goodList">
           <div class="card">
             <a href="#"><img class="card-img-top" :src="'/static/img/'+item.productImage" alt="Card image cap"></a>
             <div class="card-body">
               <h5 class="card-title">{{item.productName}}</h5>
               <p class="card-text">{{item.salePrice}}</p>
-              <a href="#" class="btn btn-primary">购买</a>
+              <a href="#" class="btn btn-primary" @click="addCart(item.productId)">加入购物车</a>
             </div>
           </div>
         </div>
+      </div>
+      <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="30">
+        加载中...
       </div>
     </div>
     <!--this is goods List page end-->
@@ -54,7 +59,7 @@
           isChoose:true,
           page:1,
           pageSize:8,
-
+          busy:true
         }
       },
       name: "GoodsList",
@@ -63,7 +68,7 @@
         this.getGoodsList();
       },
       methods:{
-        getGoodsList(){
+        getGoodsList(flag){
           let param = {
             page:this.page,
             pageSize:this.pageSize,
@@ -71,12 +76,21 @@
           };
           axios.get("/goods",{params:param}).then((response)=>{
             let res = response.data;
-            if(res.status == "0"){
-              this.goodList = res.result.list;
+            if(res.status === "0"){
+              if(flag){
+                this.goodList = this.goodList.concat(res.result.list);
+                if (res.result.count == 0){
+                  this.busy = true;
+                }else {
+                  this.busy = false;
+                }
+              }else {
+                this.goodList = res.result.list;
+                this.busy = false;
+              }
             }else{
               this.goodList =[];
             }
-            console.log(this.goodList);
           })
         },
         toggleActive(){
@@ -84,10 +98,32 @@
           this.page = 1;
           this.getGoodsList();
 
+        },
+        loadMore(){
+
+          this.busy = true;
+          setTimeout(() => {
+            this.page++;
+            this.getGoodsList(true);
+          }, 1000);
+        },
+        addCart(productId){
+          axios.post("/goods/addCart",{
+            productId:productId
+          }).then((res)=>{
+            if(res.data.status == 0){
+              alert("成功")
+            }else{
+              alert("失败")
+            }
+          })
         }
       }
     }
 </script>
 
-<style scoped>
+<style>
+  .goodsCard{
+    margin-bottom: 1.2rem;
+  }
 </style>

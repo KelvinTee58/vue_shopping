@@ -1,11 +1,13 @@
-var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
+let mongoose = require("mongoose");
+let Schema = mongoose.Schema;
 
-var productSchema = new Schema({
+let productSchema = new Schema({
   "productId":String,
   "productName":String,
   "salePrice":Number,
   "productImage":String,
+  "checked":String,
+  "productNum":Number
 },{
   collection:'Goods'
 });
