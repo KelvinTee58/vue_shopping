@@ -22,7 +22,7 @@ mongoose.connection.on("disconnection",function () {
 });
 
 
-router.get("/",function (req, res, next) {
+router.get("/list",function (req, res, next) {
   let sort = req.param("sort");
   let page = parseInt(req.param("page"));
   let pageSize = parseInt(req.param("pageSize"));

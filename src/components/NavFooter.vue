@@ -1,6 +1,6 @@
 <template>
     <div class="footer">
-      <img src="@/assets/css/mark-github.svg">
+      <img src="@/assets/mark-github.svg">
       <div>
         <a href="https://kevinjiezheng.github.io/">KevinJieZheng</a>
       </div>

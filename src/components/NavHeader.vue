@@ -6,14 +6,17 @@
       </div>
       <div class="col-md-6">
         <div class="loginButton">
+
           <img src="@/assets/person.png" v-if="loginName">
           <span style="color:red;" v-text="loginName" v-if="loginName"></span>
           <a href="#" data-toggle="modal" data-target="#myModal" v-if="!loginName">Login in</a>
           <a href="#" data-toggle="modal" @click="loginOut" v-if="loginName">Login out</a>
+          <router-link to="/cart">
+            <img src="@/assets/shopping_cart.png" v-if="loginName">
+          </router-link>
         </div>
       </div>
     </div>
-
 
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
          data-backdrop="true">
@@ -75,6 +78,9 @@
         loginName:''
       }
     },
+    mounted(){
+      this.checkLogin();
+    },
     methods:{
       loginIn(){
         axios.post("/users/login",{
@@ -100,10 +106,20 @@
         axios.post("/users/logout").then((response)=>{
           let res = response.data;
           console.log("1+"+res);
-          if(res.status == '0'){
+          if(res.status === '0'){
             this.loginName = '';
           }
         })
+      },
+      checkLogin(){
+        axios.get("/users/checkLogin").then((response)=>{
+          let res = response.data;
+          if(res.status === '0'){
+
+            this.loginName = res.result;
+
+          }
+        });
       }
     }
   }

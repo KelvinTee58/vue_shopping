@@ -5,6 +5,7 @@ import './../../node_modules/bootstrap/dist/js/bootstrap.min';
 import './../../node_modules/bootstrap/dist/css/bootstrap.css';
 
 import GoodsList from '@/views/GoodsList.vue';
+import Cart from '@/views/Cart.vue';
 
 Vue.use(Router);
 
@@ -13,6 +14,10 @@ export default new Router({
     {
       path: '/',
       component: GoodsList
+    },
+    {
+      path:'/cart',
+      component:Cart
     }
   ]
 })
