@@ -5,14 +5,31 @@ import App from './App'
 import router from './router'
 import infiniteScroll from "vue-infinite-scroll"
 import 'jquery'
+import VueCurrencyFilter from 'vue-currency-filter'
 
-Vue.config.productionTip = false
+import ViewUI from 'view-design';
+import 'view-design/dist/styles/iview.css';
+
+
+Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 Vue.use(infiniteScroll);
+Vue.use(ViewUI);
+Vue.use(VueCurrencyFilter,
+  {
+    symbol : '￥',
+    thousandsSeparator: ',',
+    fractionCount: 2,
+    fractionSeparator: '.',
+    symbolPosition: 'front',
+    symbolSpacing: true
+  });
+
+
 new Vue({
   el: '#app',
   router,
   components: { App },
   template: '<App/>'
-})
+});

@@ -18,6 +18,7 @@
     height: 10rem;
     /*border: 1px solid #000;*/
     padding-top: 6rem;
+    text-align: center;
   }
   img{
     width: 1rem;

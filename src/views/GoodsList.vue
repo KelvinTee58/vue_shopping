@@ -23,15 +23,18 @@
       </nav>
 
       <div class="row justify-content-left" >
-        <div class="col-md-3 goodsCard" style="min-width: 18rem;max-width: 20rem;" v-for="item in goodList">
+        <div class="col-md-3 goodsCard " style="max-width: 20rem;" v-for="item in goodList">
           <div class="card">
             <a href="#">
               <img class="card-img-top" :src="'/static/img/'+item.productImage" v-bind:alt="item.productName">
             </a>
             <div class="card-body">
-              <h5 class="card-title">{{item.productName}}</h5>
-              <p class="card-text">{{item.salePrice}}</p>
-              <a href="#" class="btn btn-primary" @click="addCart(item.productId)">加入购物车</a>
+              <h5 class="card-text">{{item.salePrice|currency}}</h5>
+              <p class="card-title">{{item.productName}}</p>
+              <div class="card-btn">
+                <a href="#" class="btn btn-primary" @click="addCart(item.productId)">加入购物车</a>
+              </div>
+
             </div>
           </div>
         </div>
@@ -146,10 +149,21 @@
 
 <style>
   .goodsCard{
-    margin-bottom: 1.2rem;
+    margin:0 auto 1.2rem auto;
   }
   .card:hover{
     box-shadow: 0 0 2rem #ccc;
     -moz-box-shadow:0 0 2rem #ccc;
+  }
+  .card-title{
+    text-align: center;
+  }
+  .card-text{
+    text-align: left;
+    font-weight: bold;
+    padding-bottom:0.8rem ;
+  }
+  .card-btn{
+    text-align: center;
   }
 </style>

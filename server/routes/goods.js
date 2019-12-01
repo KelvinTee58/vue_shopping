@@ -103,7 +103,7 @@ router.post("/addCart",function (req,res,next) {
               if(prodoc){
 
                 prodoc.productNum=1;
-                prodoc.checked='1';
+                prodoc.checked=1;
 
                 userDoc.cartList.push(prodoc);
                 userDoc.save(function (err2,doc2) {

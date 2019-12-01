@@ -6,6 +6,7 @@ import './../../node_modules/bootstrap/dist/css/bootstrap.css';
 
 import GoodsList from '@/views/GoodsList.vue';
 import Cart from '@/views/Cart.vue';
+import Address from '@/views/address.vue';
 
 Vue.use(Router);
 
@@ -18,6 +19,10 @@ export default new Router({
     {
       path:'/cart',
       component:Cart
+    },
+    {
+      path:'/address',
+      component:Address
     }
   ]
 })

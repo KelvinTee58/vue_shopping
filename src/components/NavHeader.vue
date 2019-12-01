@@ -1,7 +1,7 @@
 <template>
   <header>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-6" v-on:click="toHome" style="text-align: center;">
         <img src="@/assets/logo.png" class="logo">
       </div>
       <div class="col-md-6">
@@ -111,6 +111,9 @@
           }
         })
       },
+      toHome(){
+        this.$router.push({ path:'/' })
+      },
       checkLogin(){
         axios.get("/users/checkLogin").then((response)=>{
           let res = response.data;
@@ -125,14 +128,16 @@
   }
 </script>
 <style scoped>
+
   .logo {
     width: 4rem;
     margin: 1rem;
-  }
 
+  }
   .loginButton {
     font-size: 1.4rem;
     line-height: 6rem;
+    text-align: center;
   }
   .loginButton a{
     font-size: 1rem;
@@ -145,4 +150,5 @@
     font-size: 0.6rem;
     color: red;
   }
+
 </style>

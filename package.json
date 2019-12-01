@@ -21,9 +21,11 @@
     "mongoose": "^5.7.1",
     "morgan": "~1.9.0",
     "popper.js": "^1.15.0",
+    "view-design": "^4.0.2",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1",
-    "vue-infinite-scroll": "^2.0.2"
+    "vue-currency-filter": "^3.4.3",
+    "vue-infinite-scroll": "^2.0.2",
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
