@@ -198,6 +198,7 @@ router.post("/editCheckAll",function (req,res,next) {
   })
 });
 
+//获取地址列表
 router.get("/addressList",function (req,res,next) {
   let userId = req.cookies.userId;
 
@@ -219,5 +220,58 @@ router.get("/addressList",function (req,res,next) {
     }
   })
 });
+
+
+//修改默认地址
+router.post("/setDefault",function (req,res,next) {
+  let userId = req.cookies.userId,
+    addressId = req.body.addressId;
+  if(!addressId) {
+      res.json({
+        status: '1001',
+        msg: 'addressId is null',
+        result: ''
+      });
+    }
+  else{
+      User.findOne({userId:userId}, function (err1, doc) {
+        if (err1) {
+          res.json({
+            status: '1',
+            msg: err1.message,
+            result: ''
+          })
+        }
+        else {
+          let addressList = doc.addressList;
+          addressList.forEach((item) => {
+            if(item.addressId == addressId){
+              item.isDefault = true;
+            }else {
+              item.isDefault = false;
+            }
+          });
+          doc.save(function (err2, doc1) {
+            if (err2) {
+              res.json({
+                status: '1',
+                msg: err2.message,
+                result: ''
+              })
+            }
+            else {
+              res.json({
+                status: '0',
+                msg: '',
+                result: 'seting isDefault Success'
+              })
+            }
+          })
+        }
+      })
+    }
+});
+
+//删除地址
 
 module.exports = router;

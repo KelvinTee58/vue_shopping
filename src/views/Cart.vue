@@ -41,8 +41,8 @@
         <tfoot>
         <tr>
           <td class="check-btn" @click="checkAll()">
-            <img src="@/assets/check_default.png" v-bind:class="{'check':checkAllList == '1'}" />
-            <img src="@/assets/check_full.png" v-bind:class="{'check':checkAllList != '1'}" />
+            <img src="@/assets/check_default.png" v-bind:class="{'check':checkAllList === '1'}" />
+            <img src="@/assets/check_full.png" v-bind:class="{'check':checkAllList !== '1'}" />
             <span>全选</span>
           </td>
           <td colspan="4" class="text-right">总价格 <span class="PriceCount">{{PriceCount|currency}}</span></td>
@@ -75,7 +75,6 @@
         return{
           cartList:[],
           productId:'',
-          //checkAllList:'0',
         }
       },
       mounted(){
@@ -115,7 +114,6 @@
         },
         //请求后端删除
         deleteGoods(){
-
           axios.post('/users/cart/delete',{
             productId:this.productId,
           }).then((response)=>{
@@ -171,7 +169,7 @@
             checked:item.checked,
           }).then((response)=>{
             let res = response.data;
-
+            console.log("修改成功")
           })
         },
         //结算跳转

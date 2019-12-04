@@ -13,7 +13,7 @@
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">价格排序</a>
-            <div class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <div class="dropdown-menu" role="menu" aria-labelledby="dLabel" style="left: -4rem">
               <a class="dropdown-item" :class="{'active':isChoose}" @click="toggleActive" href="#">按价格由高到低</a>
               <a class="dropdown-item" :class="{'active':!isChoose}" @click="toggleActive" href="#">按价格由低到高</a>
             </div>
@@ -23,7 +23,10 @@
       </nav>
 
       <div class="row justify-content-left" >
-        <div class="col-md-3 goodsCard " style="max-width: 20rem;" v-for="item in goodList">
+
+
+
+        <div class="col-sm-3 col-6 goodsCard" style="max-width: 20rem;" v-for="item in goodList">
           <div class="card">
             <a href="#">
               <img class="card-img-top" :src="'/static/img/'+item.productImage" v-bind:alt="item.productName">
@@ -39,7 +42,7 @@
           </div>
         </div>
       </div>
-      <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="30">
+      <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="30" v-show="!busy">
         加载中...
       </div>
     </div>
@@ -100,11 +103,7 @@
             if(res.status === "0"){
               if(flag){
                 this.goodList = this.goodList.concat(res.result.list);
-                if (res.result.count == 0){
-                  this.busy = true;
-                }else {
-                  this.busy = false;
-                }
+                this.busy = res.result.count === 0;
               }else {
                 this.goodList = res.result.list;
                 this.busy = false;
@@ -132,11 +131,7 @@
           axios.post("/goods/addCart",{
             productId:productId
           }).then((res)=>{
-            if(res.data.status == 0){
-              this.isLogin = true;
-            }else{
-              this.isLogin = false;
-            }
+            this.isLogin = res.data.status === "0";
             $('#tipModal').modal('show');
           })
         },
@@ -149,13 +144,16 @@
 
 <style>
   .goodsCard{
-    margin:0 auto 1.2rem auto;
+    margin-bottom: 1.2rem;
   }
   .card:hover{
     box-shadow: 0 0 2rem #ccc;
     -moz-box-shadow:0 0 2rem #ccc;
   }
   .card-title{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     text-align: center;
   }
   .card-text{
