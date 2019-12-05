@@ -56,7 +56,7 @@ router.get("/list",function (req, res, next) {
 
 //添加购物车
 router.post("/addCart",function (req,res,next) {
-  var userId = '10001',productId = req.body.productId;
+  let userId = req.cookies.userId,productId = req.body.productId;
 
   User.findOne({userId:userId},function (err,userDoc) {
     if(err){

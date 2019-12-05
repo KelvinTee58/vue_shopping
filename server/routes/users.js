@@ -223,7 +223,7 @@ router.get("/addressList",function (req,res,next) {
 
 
 //修改默认地址
-router.post("/setDefault",function (req,res,next) {
+router.post("/addressList/setDefault",function (req,res,next) {
   let userId = req.cookies.userId,
     addressId = req.body.addressId;
   if(!addressId) {
@@ -273,5 +273,32 @@ router.post("/setDefault",function (req,res,next) {
 });
 
 //删除地址
+router.post("/addressList/deleteAddress",function (req,res,next) {
+  let userId = req.cookies.userId,
+    addressId = req.body.addressId;
+  User.update({
+   userId:userId
+  },{
+    $pull: {
+      'addressList':{
+        'addressId':addressId
+      }
+    }
+  },function (err,doc) {
+    if(err){
+      res.json({
+        status:"1",
+        msg:err.message,
+        result:'',
+      })
+    }else {
+      res.json({
+        status:"0",
+        msg:'',
+        result:'delete address success',
+      })
+    }
+  })
+});
 
 module.exports = router;

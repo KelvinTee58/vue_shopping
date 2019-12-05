@@ -19,7 +19,7 @@
 
       <!--address start-->
       <div class="row">
-        <div class="col-6 col-md-3" v-for="(item,index) in addressListFilter" @click="checkAddressIndex = index">
+        <div class="col-6 col-md-3" v-for="(item,index) in addressListFilter" @click="checkAddressIndex = index,checkAddressId = item.addressId">
           <Card class="AddressCard" :class="{'AddressCardCheck':checkAddressIndex === index}">
             <div class="addressName" slot="title">{{item.userName}}</div>
             <a slot="extra" >
@@ -45,7 +45,10 @@
         <Button type="dashed">添加新地址</Button>
       </div>
       <div style="text-align: center">
-        <Button type="primary" @click="next">下一步</Button>
+        <Button type="primary" @click="next">
+          下一步
+          <router-link></router-link>
+        </Button>
       </div>
     </div>
     <Modal>
@@ -72,6 +75,7 @@
           addressList:[],
           showMore:4,
           checkAddressIndex:0,
+          checkAddressId:'',
           addressId:''
         };
       },
@@ -109,14 +113,18 @@
           console.log(this.checkAddressIndex)
         },
         setDefaultAddress(addressId){
-          axios.post('/users/setDefault',{
+          axios.post('/users/addressList/setDefault',{
             addressId:addressId,
           }).then((response)=>{
             this.getAddressList();
           })
         },
         deleteAddress(){
-
+          axios.post('/users/addressList/deleteAddress',{
+            addressId:this.addressId,
+          }).then((response)=>{
+            console.log(response.data)
+          })
         }
       }
     }
