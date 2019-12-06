@@ -1,25 +1,11 @@
 <template>
   <div>
-    <nav-header></nav-header>
-    <nav-bread>
-      <span slot="bread">Address</span>
-    </nav-bread>
-
     <div class="main">
-      <!--steps start-->
-      <Steps :current="current" class="Steps">
-        <Step title="选择地址"></Step>
-        <Step title="订单" content="查看商品订单"></Step>
-        <Step title="支付" content="进行支付"></Step>
-        <Step title="支付成功"></Step>
-      </Steps>
-      <!--steps end-->
-
-
 
       <!--address start-->
       <div class="row">
-        <div class="col-6 col-md-3" v-for="(item,index) in addressListFilter" @click="checkAddressIndex = index,checkAddressId = item.addressId">
+        <div class="col-6 col-md-3" v-for="(item,index) in addressListFilter"
+             @click="setCheckoutDate(index,item.addressId)">
           <Card class="AddressCard" :class="{'AddressCardCheck':checkAddressIndex === index}">
             <div class="addressName" slot="title">{{item.userName}}</div>
             <a slot="extra" >
@@ -44,12 +30,12 @@
       <div style="text-align: right">
         <Button type="dashed">添加新地址</Button>
       </div>
-      <div style="text-align: center">
+      <div class="myButton">
         <Button type="primary" @click="next">
           下一步
-          <router-link></router-link>
         </Button>
       </div>
+
     </div>
     <Modal>
       <p slot="message">是否删除该地址</p>
@@ -58,23 +44,20 @@
         <button type="button" class="btn btn-danger" data-dismiss="modal" @click="deleteAddress()">删除</button>
       </div>
     </Modal>
-    <nav-footer></nav-footer>
+
   </div>
 </template>
 <script>
-    import NavHeader from "@/components/NavHeader.vue";
-    import NavFooter from "@/components/NavFooter.vue";
-    import NavBread from "@/components/NavBread.vue";
+    import bus from "@/router/bus"
     import Modal from "@/components/Modal.vue";
     import axios from 'axios';
     export default {
-      components: {NavHeader,NavFooter,NavBread,Modal},
+      components: {Modal},
       data() {
         return {
-          current: 0,
           addressList:[],
           showMore:4,
-          checkAddressIndex:0,
+          checkAddressIndex:null,
           checkAddressId:'',
           addressId:''
         };
@@ -96,8 +79,13 @@
         this.getAddressList();
       },
       methods: {
-        next() {
-          this.current++;
+        next(){
+          this.$emit('toOrder',1);
+          bus.$emit('get-id',this.checkAddressId);
+        },
+        setCheckoutDate(index,id){
+          this.checkAddressIndex = index;
+          this.checkAddressId = id;
         },
         tipModal(addressId){
           $('#tipModal').modal('show');
@@ -119,6 +107,7 @@
             this.getAddressList();
           })
         },
+
         deleteAddress(){
           axios.post('/users/addressList/deleteAddress',{
             addressId:this.addressId,
@@ -126,16 +115,14 @@
             console.log(response.data)
           })
         }
+
       }
     }
 </script>
 
 <style scoped>
 
-  .main{
-    max-width: 80rem;
-    margin: 0 auto;
-  }
+
   .AddressCard{
     height: 12rem;
     margin-bottom: 1rem;
@@ -159,9 +146,7 @@
   .addressSetDefault{
     display: none;
   }
-  .Steps{
-    margin-bottom: 3rem;
-  }
+
   .addressStreet{
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -184,6 +169,14 @@
   }
   .addressMore img{
     width: 0.8rem;
+  }
+  .myButton{
+    text-align: center;
+  }
+  .myButton Button{
+    height: 2.3rem;
+    font-size: 1.2rem;
+    line-height: 2.3rem;
   }
 
 </style>

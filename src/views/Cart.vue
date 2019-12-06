@@ -175,7 +175,7 @@
         //结算跳转
         checkout(){
           if(this.checkCount>0){
-            this.$router.push({'path':'/address'});
+            this.$router.push({'path':'/checkout'});
           }
         },
 
@@ -187,7 +187,6 @@
 <style scoped>
   td{
     line-height: 5rem;
-
   }
   .check-btn img{
     height: 1.5rem;
@@ -229,7 +228,7 @@
     text-align: center;
   }
   .table-head{
-    background-color: rgb(18,170,219);
+    background-color: rgb(40,140,240);
   }
   .main{
     max-width: 80rem;

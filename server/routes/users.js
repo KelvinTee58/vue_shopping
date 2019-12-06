@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var User = require("./../models/user");
+require('./../util/util');
+
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -245,7 +247,7 @@ router.post("/addressList/setDefault",function (req,res,next) {
         else {
           let addressList = doc.addressList;
           addressList.forEach((item) => {
-            if(item.addressId == addressId){
+            if(item.addressId === addressId){
               item.isDefault = true;
             }else {
               item.isDefault = false;
@@ -299,6 +301,74 @@ router.post("/addressList/deleteAddress",function (req,res,next) {
       })
     }
   })
+});
+
+//订单支付
+router.post('/checkout/pay',function (req,res,next) {
+  let userId = req.cookies.userId,
+    sumPay = req.body.sumPay,
+    addressId = req.body.addressId ;
+    User.findOne({userId:userId},function (err,doc) {
+      if(err){
+        res.json({
+          status:'1',
+          msg:err.message,
+          result:'no users'
+        })
+      }
+      else {
+
+        let address = null,goodsList = [];
+        //保存选中的地址信息
+        doc.addressList.forEach((item)=>{
+          if(addressId === item.addressId){
+            address = item;
+          }
+        });
+        //保存选中的购物选中的购买商品信息
+        doc.cartList.forEach((item)=>{
+          if(item.checked === '1'){
+            goodsList.push(item);
+          }
+        });
+
+        let r1=Math.floor(Math.random()*10);
+
+        let sysDate = new Date().Format('yyyyMMddhhmmss');
+        let CreateDat = new Date().Format('yyyy-MM-dd hh:mm:ss');
+        let orderId = userId+r1+sysDate;
+
+        let order = {
+          "orderId":orderId,
+          "orderSum":sumPay,
+          "addressInfo":address,
+          "goodsList":goodsList,
+          "orderStatus":"1",
+          "createDate":CreateDat,
+        };
+
+        doc.orderList.push(order);
+        doc.save(function (err2,doc1) {
+          if(err2){
+            res.json({
+              status:'1',
+              msg:err2.message,
+              result:'err save order'
+            })
+          }
+          else{
+            res.json({
+              status:'0',
+              msg:'',
+              result: {
+                orderId: order.orderId,
+                orderSum:order.orderSum,
+              }
+            })
+          }
+        });
+      }
+    })
 });
 
 module.exports = router;
