@@ -5,7 +5,7 @@
       <span slot="bread">Cart</span>
     </nav-bread>
     <div class="main table-responsive">
-      <table class="table table-hover">
+      <table class="table table-hover ">
         <thead class="table-head">
           <tr>
             <th scope="col">选择</th>
@@ -16,7 +16,7 @@
             <th scope="col">操作</th>
           </tr>
         </thead>
-        <tbody v-for="cartItem in cartList">
+        <tbody v-for="cartItem in cartList" >
         <tr>
           <td class="check-btn" @click="editCart('checked',cartItem)" >
             <img v-bind:class="{'check':cartItem.checked == '1'}" src="@/assets/check_default.png" />
@@ -114,21 +114,26 @@
         },
         //请求后端删除
         deleteGoods(){
+
           axios.post('/users/cart/delete',{
             productId:this.productId,
           }).then((response)=>{
             let res = response.data;
             if(res.status === '0'){
               $('#tipModal').modal('hide');
+              this.init();
               this.deleteDatePro();
+
             }
           })
         },
         //前端删除
         deleteDatePro(){
+
           let item;
           for (item in this.cartList){
             if(this.cartList[item].productId === this.productId){
+              this.$store.commit("upDataCartCount",-this.cartList[item].productNum);
               this.cartList.splice(item,1);
             }
           }
@@ -153,16 +158,20 @@
         },
         //修改购物车信息
         editCart(flag,item){
+          let num = 0;
           if(flag === 'add'){
             item.productNum ++;
+            num =1;
           }else if(flag === 'minus'){
             if(item.productNum>1){
               item.productNum --;
+              num = -1;
             }
           }
           else if(flag === 'checked'){
             item.checked = item.checked ==="1"?"0":"1";
           }
+          this.$store.commit("upDataCartCount",num);
           axios.post('/users/cartEdit',{
             productId:item.productId,
             productNum:item.productNum,
