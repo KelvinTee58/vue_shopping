@@ -14,15 +14,25 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: GoodsList
+      component: GoodsList,
+      meta:{
+        title:'电子商城'
+      }
     },
     {
       path:'/cart',
-      component:Cart
+      component:Cart,
+      meta:{
+        title:'购物车'
+      }
     },
     {
       path:'/checkout',
-      component:checkout
+      component:checkout,
+      meta:{
+        title:'订单结算'
+      }
     }
   ]
 })
+

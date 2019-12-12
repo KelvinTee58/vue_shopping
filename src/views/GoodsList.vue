@@ -133,6 +133,7 @@
           }).then((res)=>{
             this.isLogin = res.data.status === "0";
             $('#tipModal').modal('show');
+            this.$store.commit("upDataCartCount",1)
           })
         },
         toCart(){

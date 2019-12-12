@@ -7,12 +7,14 @@
       <div class="col-md-6">
         <div class="loginButton">
 
-          <img src="@/assets/person.png" v-if="loginName">
-          <span style="color:red;" v-text="loginName" v-if="loginName"></span>
-          <a href="#" data-toggle="modal" data-target="#myModal" v-if="!loginName">Login in</a>
-          <a href="#" data-toggle="modal" @click="loginOut" v-if="loginName">Login out</a>
-          <router-link to="/cart">
-            <img src="@/assets/shopping_cart.png" v-if="loginName">
+          <img src="@/assets/person.png" v-if="getUserName !== ''">
+          <span style="color:red;" v-text="getUserName" v-if="getUserName !== ''"></span>
+          <a href="#" data-toggle="modal" data-target="#myModal" v-if="getUserName === ''">Login in</a>
+          <a href="#" data-toggle="modal" @click="loginOut" v-if="getUserName !== ''" style="padding-left: 3rem;padding-right: 3rem">Login out</a>
+          <router-link to="/cart"  v-if="getUserName !== ''">
+            <Badge :count="getCartCountDate">
+              <img src="@/assets/shopping_cart.png">
+            </Badge>
           </router-link>
         </div>
       </div>
@@ -75,27 +77,34 @@
         userName:'',
         userPwd: '',
         errTip:false,
-        loginName:''
+      }
+    },
+    computed:{
+      getUserName(){
+        return this.$store.state.userName;
+      },
+      getCartCountDate(){
+        return this.$store.state.cartCount;
       }
     },
     mounted(){
       this.checkLogin();
+      this.getCartCount();
     },
+
     methods:{
       loginIn(){
         axios.post("/users/login",{
           userName:this.userName,
           userPwd:this.userPwd,
         }).then((response)=>{
-
           let res = response.data;
           if(res.status==="0"){
             this.errTip = false;
             this.hideModal();
-            this.loginName = res.result.userName;
+            this.$store.commit("upDataUserInfo",res.result.userName);
           }else {
             this.errTip = true;
-            console.log("err")
           }
         })
       },
@@ -105,9 +114,9 @@
       loginOut(){
         axios.post("/users/logout").then((response)=>{
           let res = response.data;
-          console.log("1+"+res);
           if(res.status === '0'){
-            this.loginName = '';
+            this.$store.commit("upDataUserInfo",'');
+            this.$store.commit("initCartCount",0);
           }
         })
       },
@@ -119,10 +128,16 @@
           let res = response.data;
           if(res.status === '0'){
 
-            this.loginName = res.result;
-
+            //this.loginName = res.result;
+            this.$store.commit("upDataUserInfo",res.result);
           }
         });
+      },
+      getCartCount(){
+        axios.get("/users/goodCartCount").then((response)=>{
+          let res = response.data;
+          this.$store.commit("initCartCount",res.result);
+        })
       }
     }
   }
@@ -131,17 +146,17 @@
 
   .logo {
     width: 4rem;
-    margin: 1rem;
-
+    margin: 2rem;
   }
   .loginButton {
     font-size: 1.4rem;
-    line-height: 6rem;
+    padding: 3rem 0 3rem 0;
+
     text-align: center;
   }
   .loginButton a{
     font-size: 1rem;
-    padding-left: 3rem;
+
   }
   .loginButton img{
     height: 1.6rem;
